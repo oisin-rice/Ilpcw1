@@ -34,8 +34,8 @@ public class ServiceController {
                 "</body></html>";
     }
 
-    @GetMapping("/uuid")
-    public String uuid() {
+    @GetMapping("/uid")
+    public String uid() {
         return "s12345678";
     }
 }

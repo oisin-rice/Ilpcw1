@@ -17,5 +17,9 @@ WORKDIR /app
 # Copy the built JAR file from the previous stage to the container
 COPY --from=build /app/target/IlpTutorial1*.jar app.jar
 EXPOSE 8080
+
+# Showing how ENV variables can be set
+# ENV ILP_SERVICE_URL=https://ilp-rest-2024.azurewebsites.net/
+
 # Set the command to run the application
 CMD ["java", "-jar", "./app.jar"]

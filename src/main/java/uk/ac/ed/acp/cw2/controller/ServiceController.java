@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
-import uk.ac.ed.acp.cw2.data.RuntimeEnvironment;
 
 import java.net.URL;
 import java.time.Instant;
@@ -38,4 +37,5 @@ public class ServiceController {
     public String uid() {
         return "s12345678";
     }
+
 }

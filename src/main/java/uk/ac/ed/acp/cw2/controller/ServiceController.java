@@ -12,6 +12,9 @@ import java.time.Instant;
 
 import uk.ac.ed.acp.cw2.data.*;
 
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+
 /**
  * Controller class that handles various HTTP endpoints for the application.
  * Provides functionality for serving the index page, retrieving a static UUID,
@@ -49,6 +52,16 @@ public class ServiceController {
     @PostMapping("/isCloseTo")
     public boolean isCloseTo(@RequestBody LocationPair positions){
         return positions.calcDistance() < 0.00015;
+    }
+
+    @PostMapping("/nextPosition")
+    public Location nextPosition(@RequestBody StartPosition start){
+        float angle = start.angle();
+
+        double nextX = start.start().lng() + 0.00015 * cos(angle);
+        double nextY = start.start().lat() + 0.00015 * sin(angle);
+
+        return new Location(nextX, nextY);
     }
 
 }

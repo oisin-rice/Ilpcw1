@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URL;
 import java.time.Instant;
 
+import uk.ac.ed.acp.cw2.data.*;
+
 /**
  * Controller class that handles various HTTP endpoints for the application.
  * Provides functionality for serving the index page, retrieving a static UUID,
@@ -36,6 +38,12 @@ public class ServiceController {
     @GetMapping("/uid")
     public String uid() {
         return "s12345678";
+    }
+
+
+    @PostMapping("/distanceTo")
+    public double distanceTo(@RequestBody LocationPair positions){
+        return positions.calcDistance();
     }
 
 }

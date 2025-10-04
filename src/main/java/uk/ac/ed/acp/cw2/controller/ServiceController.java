@@ -64,4 +64,7 @@ public class ServiceController {
         return new Location(nextX, nextY);
     }
 
+    //@PostMapping("/isInRegion")
+    //public boolean isInRegion(@RequestBody )
+
 }

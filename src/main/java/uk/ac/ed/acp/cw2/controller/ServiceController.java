@@ -71,6 +71,9 @@ public class ServiceController {
         if (!inRegion.getRegion().isValid()){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        boolean isIn = inRegion.inRegion();
+
+        return new ResponseEntity<>(isIn,HttpStatus.OK);
 
     }
 

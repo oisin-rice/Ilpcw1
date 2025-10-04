@@ -46,4 +46,9 @@ public class ServiceController {
         return positions.calcDistance();
     }
 
+    @PostMapping("/isCloseTo")
+    public boolean isCloseTo(@RequestBody LocationPair positions){
+        return positions.calcDistance() < 0.00015;
+    }
+
 }

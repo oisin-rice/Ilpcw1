@@ -8,11 +8,6 @@ public class Region {
     private Location[] vertices;
 
     public boolean isValid(){
-        for(int i = 1; i < vertices.length; i++){
-            if (vertices[0].equals(vertices[i])){
-                return true;
-            }
-        }
-        return false;
+        return vertices[0].equals(vertices[vertices.length -1]);
     }
 }

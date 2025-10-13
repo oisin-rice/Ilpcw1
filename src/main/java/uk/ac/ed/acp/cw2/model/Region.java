@@ -1,8 +1,10 @@
-package uk.ac.ed.acp.cw2.data;
+package uk.ac.ed.acp.cw2.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class Region {
     private String name;
     private Location[] vertices;

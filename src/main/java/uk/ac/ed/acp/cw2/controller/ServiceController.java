@@ -13,6 +13,9 @@ import java.net.URL;
 import java.time.Instant;
 
 import uk.ac.ed.acp.cw2.data.*;
+import uk.ac.ed.acp.cw2.mappers.LocationPairMapper;
+import uk.ac.ed.acp.cw2.model.LocationPair;
+import uk.ac.ed.acp.cw2.service.LocationService;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
@@ -47,32 +50,33 @@ public class ServiceController {
 
 
     @PostMapping("/distanceTo")
-    public double distanceTo(@RequestBody LocationPair positions){
-        return positions.calcDistance();
+    public double distanceTo(@RequestBody LocationPairDto positions){
+        LocationPair locationPair = LocationPairMapper.locationPairDtoToLocationPair(positions);
+        return LocationService.calcDistance(locationPair);
     }
 
     @PostMapping("/isCloseTo")
-    public boolean isCloseTo(@RequestBody LocationPair positions){
+    public boolean isCloseTo(@RequestBody LocationPairDto positions){
         return positions.calcDistance() < 0.00015;
     }
 
     @PostMapping("/nextPosition")
-    public Location nextPosition(@RequestBody StartPosition start){
+    public LocationDto nextPosition(@RequestBody StartPosition start){
         float angle = start.angle();
 
         double nextX = start.start().lng() + 0.00015 * cos(angle);
         double nextY = start.start().lat() + 0.00015 * sin(angle);
 
-        return new Location(nextX, nextY);
+        return new LocationDto(nextX, nextY);
     }
 
     @PostMapping("/isInRegion")
-    public ResponseEntity isInRegion(@RequestBody InRegion inRegion){
+    public ResponseEntity isInRegion(@RequestBody RegionAndLocationDto inRegion){
         if (!inRegion.getRegion().isValid()){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        boolean isIn = inRegion.inRegion();
 
+        boolean isIn = inRegion.inRegion();
         return new ResponseEntity<>(isIn,HttpStatus.OK);
 
     }

@@ -7,10 +7,10 @@ import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
 
 @Data
-public class LocationPair {
+public class LocationPairDto {
 
-    private Location position1;
-    private Location position2;
+    private LocationDto position1;
+    private LocationDto position2;
 
     public double calcDistance(){
         double lngDist = abs(position2.lng() - position1.lng());

@@ -13,6 +13,7 @@ import java.net.URL;
 import java.time.Instant;
 
 import uk.ac.ed.acp.cw2.data.*;
+import uk.ac.ed.acp.cw2.service.LocationService;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
@@ -48,22 +49,17 @@ public class ServiceController {
 
     @PostMapping("/distanceTo")
     public double distanceTo(@RequestBody LocationPair positions){
-        return positions.calcDistance();
+        return LocationService.calcDistance(positions);
     }
 
     @PostMapping("/isCloseTo")
     public boolean isCloseTo(@RequestBody LocationPair positions){
-        return positions.calcDistance() < 0.00015;
+        return LocationService.calcDistance(positions) < 0.00015;
     }
 
     @PostMapping("/nextPosition")
     public Location nextPosition(@RequestBody StartPosition start){
-        float angle = start.angle();
-
-        double nextX = start.start().lng() + 0.00015 * cos(angle);
-        double nextY = start.start().lat() + 0.00015 * sin(angle);
-
-        return new Location(nextX, nextY);
+        return LocationService.nextPosition(start);
     }
 
     @PostMapping("/isInRegion")

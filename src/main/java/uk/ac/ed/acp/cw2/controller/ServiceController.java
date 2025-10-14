@@ -1,24 +1,22 @@
 package uk.ac.ed.acp.cw2.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URL;
-import java.time.Instant;
 
 import uk.ac.ed.acp.cw2.data.*;
+import uk.ac.ed.acp.cw2.mappers.LocationMapper;
 import uk.ac.ed.acp.cw2.mappers.LocationPairMapper;
-import uk.ac.ed.acp.cw2.model.LocationPair;
+import uk.ac.ed.acp.cw2.mappers.RegionAndLocationMapper;
+import uk.ac.ed.acp.cw2.mappers.StartPositionMapper;
+import uk.ac.ed.acp.cw2.model.*;
 import uk.ac.ed.acp.cw2.service.LocationService;
-
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
+import uk.ac.ed.acp.cw2.service.RegionService;
 
 /**
  * Controller class that handles various HTTP endpoints for the application.
@@ -51,33 +49,42 @@ public class ServiceController {
 
     @PostMapping("/distanceTo")
     public double distanceTo(@RequestBody LocationPairDto positions){
-        LocationPair locationPair = LocationPairMapper.locationPairDtoToLocationPair(positions);
+        LocationPair locationPair = LocationPairMapper.INSTANCE.locationPairDtoToLocationPair(positions);
         return LocationService.calcDistance(locationPair);
     }
 
     @PostMapping("/isCloseTo")
     public boolean isCloseTo(@RequestBody LocationPairDto positions){
-        return positions.calcDistance() < 0.00015;
+        LocationPair locationPair = LocationPairMapper.INSTANCE.locationPairDtoToLocationPair(positions);
+        return LocationService.calcDistance(locationPair) < 0.00015;
     }
 
     @PostMapping("/nextPosition")
-    public LocationDto nextPosition(@RequestBody StartPosition start){
-        float angle = start.angle();
+    public LocationDto nextPosition(@RequestBody StartPositionDto start){
+        StartPosition startPosition = StartPositionMapper.INSTANCE.startPositionDtoToStartPosition(start);
 
-        double nextX = start.start().lng() + 0.00015 * cos(angle);
-        double nextY = start.start().lat() + 0.00015 * sin(angle);
+        Location finalPosition = LocationService.nextPosition(startPosition);
 
-        return new LocationDto(nextX, nextY);
+        return LocationMapper.INSTANCE.locationToLocationDto(finalPosition);
     }
 
     @PostMapping("/isInRegion")
     public ResponseEntity isInRegion(@RequestBody RegionAndLocationDto inRegion){
-        if (!inRegion.getRegion().isValid()){
+
+        RegionAndLocation regionAndLocation = RegionAndLocationMapper.INSTANCE.raLDtoToRaL(inRegion);
+
+        Region region = regionAndLocation.getRegion();
+
+        boolean isValidRegion = RegionService.isValid(region);
+
+        if (!isValidRegion){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        boolean isIn = inRegion.inRegion();
-        return new ResponseEntity<>(isIn,HttpStatus.OK);
+
+        boolean isInRegion = RegionService.inRegion(regionAndLocation);
+
+        return new ResponseEntity<>(isInRegion,HttpStatus.OK);
 
     }
 

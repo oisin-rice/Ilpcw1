@@ -5,11 +5,11 @@ import uk.ac.ed.acp.cw2.model.Region;
 import uk.ac.ed.acp.cw2.model.RegionAndLocation;
 
 public class RegionService {
-    public boolean isValid(Region region){
+    public static boolean isValid(Region region){
         Location[] vertices = region.getVertices();
         return vertices[0].equals(vertices[vertices.length -1]);
     }
-    public boolean inRegion(RegionAndLocation regionAndLocation){
+    public static boolean inRegion(RegionAndLocation regionAndLocation){
         int count = 0;
         for (int i = 0; i < regionAndLocation.getRegion().getVertices().length-2; i++){
             Location point1 = regionAndLocation.getRegion().getVertices()[i];

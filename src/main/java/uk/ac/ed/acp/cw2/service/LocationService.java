@@ -9,7 +9,10 @@ import static java.lang.Math.*;
 public class LocationService {
 
     public static boolean isValid(Location location){
-        return location != null;
+        if (location == null){
+            return false;
+        }
+        else return location.lng() != null && location.lat() != null;
     }
 
     public static boolean isValidPair(LocationPair locationPair){

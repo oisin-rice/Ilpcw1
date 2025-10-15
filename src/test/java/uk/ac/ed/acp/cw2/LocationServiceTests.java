@@ -61,4 +61,25 @@ public class LocationServiceTests {
                         .content(body))
                 .andExpect(status().is(400));
     }
+
+    @Test
+    public void distanceToInvalidBodySpellingError() throws Exception {
+
+        String body = """
+                {
+                    "position1": {
+                        "lg": -3.192473,
+                        "lat": 55.946233
+                    },
+                     "position2": {
+                        "lng": -3.192473,
+                        "lat": 55.942617
+                    }
+                }
+                """;
+        mockMvc.perform(post("http://localhost:8080/api/v1/distanceTo")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().is(400));
+    }
 }

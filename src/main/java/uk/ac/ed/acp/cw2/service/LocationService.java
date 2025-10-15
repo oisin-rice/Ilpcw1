@@ -7,6 +7,14 @@ import uk.ac.ed.acp.cw2.data.StartPosition;
 import static java.lang.Math.*;
 
 public class LocationService {
+
+    public static boolean isValid(Location location){
+        return location != null;
+    }
+
+    public static boolean isValidPair(LocationPair locationPair){
+        return (isValid(locationPair.getPosition1()) & isValid(locationPair.getPosition2()));
+    }
     public static double calcDistance(LocationPair locationPair){
 
         Location position1 = locationPair.getPosition1();

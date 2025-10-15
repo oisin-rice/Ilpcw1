@@ -40,4 +40,25 @@ public class LocationServiceTests {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("0.003616000000000952")));
     }
+
+    @Test
+    public void distanceToInvalidBody() throws Exception {
+
+        String body = """
+                {
+                    "position12": {
+                        "lng": -3.192473,
+                        "lat": 55.946233
+                    },
+                     "position2": {
+                        "lng": -3.192473,
+                        "lat": 55.942617
+                    }
+                }
+                """;
+        mockMvc.perform(post("http://localhost:8080/api/v1/distanceTo")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().is(400));
+    }
 }

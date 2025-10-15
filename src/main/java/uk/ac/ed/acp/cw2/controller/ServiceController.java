@@ -13,6 +13,7 @@ import java.net.URL;
 import java.time.Instant;
 import java.util.Map;
 
+import org.springframework.web.server.ResponseStatusException;
 import uk.ac.ed.acp.cw2.data.*;
 import uk.ac.ed.acp.cw2.service.LocationService;
 import uk.ac.ed.acp.cw2.service.RegionService;
@@ -51,6 +52,9 @@ public class ServiceController {
 
     @PostMapping("/distanceTo")
     public double distanceTo(@RequestBody LocationPair positions){
+        if(!LocationService.isValidPair(positions)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid region");
+        }
         return LocationService.calcDistance(positions);
     }
 

@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URL;
 import java.time.Instant;
+import java.util.Map;
 
 import uk.ac.ed.acp.cw2.data.*;
 import uk.ac.ed.acp.cw2.service.LocationService;
+import uk.ac.ed.acp.cw2.service.RegionService;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
@@ -63,11 +65,15 @@ public class ServiceController {
     }
 
     @PostMapping("/isInRegion")
-    public ResponseEntity isInRegion(@RequestBody InRegion inRegion){
-        if (!inRegion.getRegion().isValid()){
+    public ResponseEntity isInRegion(@RequestBody LocationAndRegion locationAndRegion ){
+
+        Region region =  locationAndRegion.getRegion();
+        Location position = locationAndRegion.getPosition();
+
+        if (!RegionService.isValid(region)){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        boolean isIn = inRegion.inRegion();
+        boolean isIn = RegionService.inRegion(position, region);
 
         return new ResponseEntity<>(isIn,HttpStatus.OK);
 

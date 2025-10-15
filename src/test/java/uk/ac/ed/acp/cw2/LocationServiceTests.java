@@ -124,4 +124,78 @@ public class LocationServiceTests {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("true")));
     }
+
+    @Test
+    public void nextPositionValidBody() throws Exception {
+        String body = """
+                {
+                    "start": {
+                        "lng": 0,
+                        "lat": 0
+                    },
+                    "angle": 45
+                }
+                """;
+
+        String responseBody = "{" +
+                "    'lng': 7.879829832265945E-5," +
+                "    'lat': 1.2763552868011774E-4" +
+                "}";
+        mockMvc.perform(post("http://localhost:8080/api/v1/nextPosition")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isOk())
+                .andExpect(content().json(responseBody));
+    }
+
+    @Test
+    public void nextPositionInvalidBodyNullAngle() throws Exception {
+        String body = """
+                {
+                    "start": {
+                        "lng": 0,
+                        "lat": 0
+                    },
+                    "a": 45
+                }
+                """;
+        mockMvc.perform(post("http://localhost:8080/api/v1/nextPosition")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().is(400));
+    }
+
+    @Test
+    public void nextPositionInvalidBodyNullLocation() throws Exception {
+        String body = """
+                {
+                    "s": {
+                        "lng": 0,
+                        "lat": 0
+                    },
+                    "angle": 45
+                }
+                """;
+        mockMvc.perform(post("http://localhost:8080/api/v1/nextPosition")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().is(400));
+    }
+
+    @Test
+    public void nextPositionInvalidAngle() throws Exception {
+        String body = """
+                {
+                    "start": {
+                        "lng": 0,
+                        "lat": 0
+                    },
+                    "angle": 10
+                }
+                """;
+        mockMvc.perform(post("http://localhost:8080/api/v1/nextPosition")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().is(400));
+    }
 }

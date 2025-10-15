@@ -68,6 +68,9 @@ public class ServiceController {
 
     @PostMapping("/nextPosition")
     public Location nextPosition(@RequestBody StartPosition start){
+        if(!LocationService.isValidStart(start)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid region");
+        }
         return LocationService.nextPosition(start);
     }
 

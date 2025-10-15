@@ -18,6 +18,16 @@ public class LocationService {
     public static boolean isValidPair(LocationPair locationPair){
         return (isValid(locationPair.getPosition1()) & isValid(locationPair.getPosition2()));
     }
+
+    public static boolean isValidStart(StartPosition startPosition){
+        if(!isValid(startPosition.start())){
+            return false;
+        }
+        if(startPosition.angle() == null){
+            return false;
+        }
+        else return startPosition.angle() % 22.5 == 0;
+    }
     public static double calcDistance(LocationPair locationPair){
 
         Location position1 = locationPair.getPosition1();

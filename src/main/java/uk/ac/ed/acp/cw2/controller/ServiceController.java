@@ -60,6 +60,9 @@ public class ServiceController {
 
     @PostMapping("/isCloseTo")
     public boolean isCloseTo(@RequestBody LocationPair positions){
+        if(!LocationService.isValidPair(positions)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid region");
+        }
         return LocationService.calcDistance(positions) < 0.00015;
     }
 

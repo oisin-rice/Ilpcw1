@@ -63,7 +63,7 @@ public class LocationServiceTests {
     }
 
     @Test
-    public void distanceToInvalidBodySpellingError() throws Exception {
+    public void distanceToInvalidBodyLng() throws Exception {
 
         String body = """
                 {
@@ -81,5 +81,47 @@ public class LocationServiceTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
                 .andExpect(status().is(400));
+    }
+
+    @Test
+    public void isCloseToValidBodyFalse() throws Exception {
+        String body = """
+                {
+                    "position1": {
+                        "lng": -3.192473,
+                        "lat": 55.946233
+                    },
+                     "position2": {
+                        "lng": -3.192473,
+                        "lat": 55.942617
+                    }
+                }
+                """;
+        mockMvc.perform(post("http://localhost:8080/api/v1/isCloseTo")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString("false")));
+    }
+
+    @Test
+    public void isCloseToValidBodyTrue() throws Exception {
+        String body = """
+                {
+                    "position1": {
+                        "lng": 0,
+                        "lat": 0
+                    },
+                     "position2": {
+                        "lng": 0,
+                        "lat": 0.00014
+                    }
+                }
+                """;
+        mockMvc.perform(post("http://localhost:8080/api/v1/isCloseTo")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("true")));
     }
 }

@@ -76,16 +76,17 @@ public class ServiceController {
 
     @PostMapping("/isInRegion")
     public boolean isInRegion(@RequestBody LocationAndRegion locationAndRegion ){
-
+        if(locationAndRegion.getRegion() == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid region");
+        }
         Region region =  locationAndRegion.getRegion();
         Location position = locationAndRegion.getPosition();
 
-        if (!RegionService.isValid(region)){
+        if (!RegionService.isValid(region) || !LocationService.isValid(position)){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid region");
         }
-        boolean isIn = RegionService.inRegion(position, region);
 
-        return isIn;
+        return RegionService.isInRegion(position, region);
 
     }
 

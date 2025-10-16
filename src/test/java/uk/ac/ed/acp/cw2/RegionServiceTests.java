@@ -105,4 +105,215 @@ public class RegionServiceTests {
                 .andExpect(status().is(200))
                 .andExpect(content().string(containsString("true")));
     }
+
+    @Test
+    public void isInRegionValidBodyOnRegionBoundary() throws Exception {
+        String body = """
+                {
+                "position": {
+                "lng": -2,
+                "lat": 3
+                },
+                "region": {
+                "name": "central",
+                "vertices": [
+                {
+                "lng": 3,
+                "lat": 3
+                },
+                {
+                "lng": 3,
+                "lat": -3
+                },
+                {
+                "lng": -3,
+                "lat": -3
+                },
+                {
+                "lng": -3,
+                "lat": 3
+                },
+                {
+                "lng": 3,
+                "lat": 3
+                }
+                ]
+                }
+                }
+                """;
+
+        mockMvc.perform(post("http://localhost:8080/api/v1/isInRegion")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().is(200))
+                .andExpect(content().string(containsString("true")));
+    }
+
+    @Test
+    public void isInRegionInValidBodyPosition() throws Exception {
+        String body = """
+                {
+                "p": {
+                "lng": -2,
+                "lat": 3
+                },
+                "region": {
+                "name": "central",
+                "vertices": [
+                {
+                "lng": 3,
+                "lat": 3
+                },
+                {
+                "lng": 3,
+                "lat": -3
+                },
+                {
+                "lng": -3,
+                "lat": -3
+                },
+                {
+                "lng": -3,
+                "lat": 3
+                },
+                {
+                "lng": 3,
+                "lat": 3
+                }
+                ]
+                }
+                }
+                """;
+
+        mockMvc.perform(post("http://localhost:8080/api/v1/isInRegion")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().is(400));
+    }
+
+    @Test
+    public void isInRegionInvalidBodyRegion() throws Exception {
+        String body = """
+                {
+                "position": {
+                "lng": -2,
+                "lat": 3
+                },
+                "r": {
+                "name": "central",
+                "vertices": [
+                {
+                "lng": 3,
+                "lat": 3
+                },
+                {
+                "lng": 3,
+                "lat": -3
+                },
+                {
+                "lng": -3,
+                "lat": -3
+                },
+                {
+                "lng": -3,
+                "lat": 3
+                },
+                {
+                "lng": 3,
+                "lat": 3
+                }
+                ]
+                }
+                }
+                """;
+
+        mockMvc.perform(post("http://localhost:8080/api/v1/isInRegion")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().is(400));
+    }
+
+    @Test
+    public void isInRegionInvalidBodyVertices() throws Exception {
+        String body = """
+                {
+                "position": {
+                "lng": -2,
+                "lat": 3
+                },
+                "region": {
+                "name": "central",
+                "v": [
+                {
+                "lng": 3,
+                "lat": 3
+                },
+                {
+                "lng": 3,
+                "lat": -3
+                },
+                {
+                "lng": -3,
+                "lat": -3
+                },
+                {
+                "lng": -3,
+                "lat": 3
+                },
+                {
+                "lng": 3,
+                "lat": 3
+                }
+                ]
+                }
+                }
+                """;
+
+        mockMvc.perform(post("http://localhost:8080/api/v1/isInRegion")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().is(400));
+    }
+
+    @Test
+    public void isInRegionInvalidBodyVertex() throws Exception {
+        String body = """
+                {
+                "position": {
+                "lng": -2,
+                "lat": 3
+                },
+                "region": {
+                "name": "central",
+                "vertices": [
+                {
+                "l": 3,
+                "lat": 3
+                },
+                {
+                "lng": 3,
+                "lat": -3
+                },
+                {
+                "lng": -3,
+                "lat": -3
+                },
+                {
+                "lng": -3,
+                "lat": 3
+                },
+                {
+                "lng": 3,
+                "lat": 3
+                }
+                ]
+                }
+                }
+                """;
+
+        mockMvc.perform(post("http://localhost:8080/api/v1/isInRegion")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().is(400));
+    }
 }

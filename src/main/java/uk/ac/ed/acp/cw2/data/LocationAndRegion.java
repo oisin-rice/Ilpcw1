@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class LocationAndRegion {
-    private Location position;
+    private LngLat position;
     private Region region;
 }

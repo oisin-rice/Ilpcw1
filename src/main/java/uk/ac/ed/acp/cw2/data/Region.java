@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class Region {
     private String name;
-    private Location[] vertices;
+    private LngLat[] vertices;
 }

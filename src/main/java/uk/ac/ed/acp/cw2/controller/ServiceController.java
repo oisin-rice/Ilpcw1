@@ -1,25 +1,17 @@
 package uk.ac.ed.acp.cw2.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URL;
-import java.time.Instant;
-import java.util.Map;
 
 import org.springframework.web.server.ResponseStatusException;
 import uk.ac.ed.acp.cw2.data.*;
 import uk.ac.ed.acp.cw2.service.LocationService;
 import uk.ac.ed.acp.cw2.service.RegionService;
-
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
 
 /**
  * Controller class that handles various HTTP endpoints for the application.
@@ -51,23 +43,24 @@ public class ServiceController {
 
 
     @PostMapping("/distanceTo")
-    public double distanceTo(@RequestBody LocationPair positions){
-        if(!LocationService.isValidPair(positions)){
+    public double distanceTo(@RequestBody LocationPair locations){
+        //input validation - returns 400 status
+        if(!LocationService.isValidPair(locations)){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid region");
         }
-        return LocationService.calcDistance(positions);
+        return LocationService.calcDistance(locations);
     }
 
     @PostMapping("/isCloseTo")
-    public boolean isCloseTo(@RequestBody LocationPair positions){
-        if(!LocationService.isValidPair(positions)){
+    public boolean isCloseTo(@RequestBody LocationPair locations){
+        if(!LocationService.isValidPair(locations)){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid region");
         }
-        return LocationService.calcDistance(positions) < 0.00015;
+        return LocationService.calcDistance(locations) < 0.00015;
     }
 
     @PostMapping("/nextPosition")
-    public Location nextPosition(@RequestBody StartPosition start){
+    public LngLat nextPosition(@RequestBody StartPosition start){
         if(!LocationService.isValidStart(start)){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid region");
         }
@@ -79,14 +72,15 @@ public class ServiceController {
         if(locationAndRegion.getRegion() == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid region");
         }
+        //this just makes the next if statement a bit easier to read
         Region region =  locationAndRegion.getRegion();
-        Location position = locationAndRegion.getPosition();
+        LngLat location = locationAndRegion.getPosition();
 
-        if (!RegionService.isValid(region) || !LocationService.isValid(position)){
+        if (!RegionService.isValid(region) || !LocationService.isValid(location)){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid region");
         }
 
-        return RegionService.isInRegion(position, region);
+        return RegionService.isInRegion(location, region);
 
     }
 

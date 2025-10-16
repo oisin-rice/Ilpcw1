@@ -75,17 +75,17 @@ public class ServiceController {
     }
 
     @PostMapping("/isInRegion")
-    public ResponseEntity isInRegion(@RequestBody LocationAndRegion locationAndRegion ){
+    public boolean isInRegion(@RequestBody LocationAndRegion locationAndRegion ){
 
         Region region =  locationAndRegion.getRegion();
         Location position = locationAndRegion.getPosition();
 
         if (!RegionService.isValid(region)){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid region");
         }
         boolean isIn = RegionService.inRegion(position, region);
 
-        return new ResponseEntity<>(isIn,HttpStatus.OK);
+        return isIn;
 
     }
 

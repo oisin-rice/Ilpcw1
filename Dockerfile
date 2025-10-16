@@ -4,7 +4,7 @@ EXPOSE 8080
 
 WORKDIR /app
 
-COPY ./target/IlpTutorial1-0.0.1-SNAPSHOT.jar app.jar
+COPY ./target/ilp_submission_1-0.0.1-SNAPSHOT.jar app.jar
 
 LABEL authors="oisinrice"
 
